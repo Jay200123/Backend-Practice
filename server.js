@@ -1,6 +1,5 @@
 const { RESOURCE } = require("./constants/index.js");
 const { app } = require("./config/express-config.js");
-const routes = require("./routes/index.js");
 
 require("dotenv").config({
   path: "./config/.env",
@@ -8,9 +7,12 @@ require("dotenv").config({
 const connectDB = require("./config/config.js");
 connectDB();
 
+const routes = require("./routes/index.js");
 app.use(`${RESOURCE.API}${RESOURCE.V1}`, routes);
 app.get("/", async (req, res, next) => {
-  console.log("test!");
+  const data = { message: "Express Server Running Successfully..." };
+
+  res.status(200).json(data);
 });
 
 const port = process.env.PORT;
