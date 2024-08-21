@@ -1,11 +1,12 @@
 const service = require("../service/userService");
 const asyncHandler = require("express-async-handler");
-const { ErrorHandler, SuccessHandler } = require("../utils/index");
+const ErrorHandler  = require("../utils/errorHandler");
+const { STATUSCODE } = require("../constants/index");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll();
-  return !data
-    ? next(new ErrorHandler("No Users Found"))
+  return data != STATUSCODE.ONE
+    ? next(new ErrorHandler("No Users Found", STATUSCODE.NOT_FOUND))
     : SuccessHandler(res, "Users Data found", data);
 });
 
