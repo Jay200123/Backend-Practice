@@ -1,23 +1,37 @@
-const { RESOURCE } = require("./constants/index.js");
-const { app } = require("./config/express-config.js");
+const { RESOURCE, STATUSCODE } = require("./constants/index.js");
+const { app, express } = require("./config/express-config.js");
+const { errorJson, errorHandler } = require("./middleware/errorJson");
+const logger = require("./utils/logger.js");
+const mongoose = require("mongoose"); 
 
 require("dotenv").config({
   path: "./config/.env",
 });
+
 const connectDB = require("./config/config.js");
 connectDB();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const routes = require("./routes/index.js");
+
 app.use(`${RESOURCE.API}${RESOURCE.V1}`, routes);
 app.get("/", async (req, res, next) => {
   const data = { message: "Express Server Running Successfully..." };
-
   res.status(200).json(data);
 });
 
-const port = process.env.PORT;
-const dev = process.env.NODE_ENV;
+app.use(errorJson);
+app.use(errorHandler);
 
-app.listen(port, () => {
-  console.log(`Server Running on PORT ${port} on ${dev}`);
-});
+mongoose.connection.once("open", ()=>{
+  app.listen(process.env.PORT);
+  logger.info(`Server running on ${process.env.NODE_ENV}`); 
+  logger.info(`Mongo DB connection established successfully`);         
+})
+
+mongoose.connection.on("error", (err)=>{
+  logger.error(`Mongo DB connection failed ${err}`);
+  process.exit(STATUSCODE.ONE);
+} );
