@@ -2,11 +2,10 @@ const ErrorHandler = require("../utils/errorHandler");
 const { STATUSCODE, ERROR } = require("../constants/index");
 
 const errorJson = (err, req, res, next) => {
-  if (err instanceof ErrorHandler) return next(err);
-
-  const error = new ErrorHandler(err.message);
-
-  next(error);
+  if (!(err instanceof ErrorHandler)) {
+    err = new ErrorHandler(err.message || ERROR.INTERNAL_SERVER_ERROR);
+  }
+  next(err);
 };
 
 const errorHandler = (err, req, res, next) => {
@@ -19,6 +18,7 @@ const errorHandler = (err, req, res, next) => {
       message: message,
     },
   });
+ 
 };
 
 module.exports = { errorJson, errorHandler };
