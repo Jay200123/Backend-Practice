@@ -19,6 +19,6 @@ exports.updateById = async (_id, body) => {
   });
 };
 
-exports.deleteById = async (id) => {
-  return await user.findByIdAndDelete(id);
+exports.deleteById = async (_id) => {
+  return await user.findByIdAndDelete(_id);
 };
