@@ -14,6 +14,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  image: [
+    {
+      public_id: String,
+      url: String,
+      originalname: String,
+    },
+  ],
 });
 
 module.exports = mongoose.model(RESOURCE.USERS, userSchema);
