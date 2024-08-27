@@ -1,9 +1,7 @@
 const service = require("../service/userService");
 const asyncHandler = require("express-async-handler");
 const SuccessHandler = require("../utils/successHandler");
-const { STATUSCODE } = require("../constants/index");
 const ErrorHandler = require("../utils/errorHandler");
-const mongoose = require("mongoose");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll();
@@ -11,11 +9,7 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 });
 
 exports.getOneUser = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return next(new ErrorHandler("Invalid ID"));
-  }
-  const data = await service.getById(id);
+  const data = await service.getById(req.params.id);
   return !data
     ? next(new ErrorHandler("No users found"))
     : SuccessHandler(res, "User Found", data);
@@ -30,27 +24,18 @@ exports.createUser = [
 
 exports.updateUser = [
   asyncHandler(async (req, res, next) => {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return next(new ErrorHandler("Invalid ID"));
+    const data = await service.updateById(
+    req.params.id,
+    {
+    ...req.body,
     }
-
-    const data = await service.updateById(id, {
-      ...req.body,
-    });
+  );
 
     return SuccessHandler(res, "User update successfully", data);
   }),
 ];
 
 exports.deleteUser = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return next(new ErrorHandler("Invalid ID"));
-  }
-
-  const data = await service.deleteById(id);
-
+  const data = await service.deleteById(req.params.id);
   return SuccessHandler(res, "User deleted successfully", data);
 });
