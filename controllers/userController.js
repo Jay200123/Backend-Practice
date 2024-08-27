@@ -5,7 +5,9 @@ const ErrorHandler = require("../utils/errorHandler");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll();
-  return SuccessHandler(res, "Users Data found", data);
+  return !data
+    ? next(new ErrorHandler("No users found"))
+    : SuccessHandler(res, "Users Data found", data);
 });
 
 exports.getOneUser = asyncHandler(async (req, res, next) => {
@@ -24,12 +26,9 @@ exports.createUser = [
 
 exports.updateUser = [
   asyncHandler(async (req, res, next) => {
-    const data = await service.updateById(
-    req.params.id,
-    {
-    ...req.body,
-    }
-  );
+    const data = await service.updateById(req.params.id, {
+      ...req.body,
+    });
 
     return SuccessHandler(res, "User update successfully", data);
   }),
@@ -37,5 +36,7 @@ exports.updateUser = [
 
 exports.deleteUser = asyncHandler(async (req, res, next) => {
   const data = await service.deleteById(req.params.id);
-  return SuccessHandler(res, "User deleted successfully", data);
+  return !data
+    ? next(new ErrorHandler("User Id not found"))
+    : SuccessHandler(res, "User deleted successfully", data);
 });
