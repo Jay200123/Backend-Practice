@@ -6,4 +6,5 @@ module.exports = {
   INFO: "info",
   SERVER_LOG: "server.log",
   NETWORK_ERROR: "MongoNetworkError",
+  CLOUDINARY_FOLDER: "cloudinayImages",  
 };
