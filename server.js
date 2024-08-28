@@ -1,14 +1,13 @@
-const { RESOURCE, STATUSCODE } = require("./constants/index.js");
 const { app, express } = require("./config/express-config.js");
 const { errorJson, errorHandler } = require("./middleware/errorJson");
 const logger = require("./utils/logger.js");
-const mongoose = require("mongoose"); 
+const mongoose = require("mongoose");
+const { RESOURCE, STATUSCODE } = require("./constants/index.js");
 
-require("dotenv").config({
-  path: "./config/.env",
-});
+const globalEnvironment = require("./config/env-config.js");
+globalEnvironment();
 
-const connectDB = require("./config/config.js");
+const connectDB = require("./config/db-config.js");
 connectDB();
 
 app.use(express.json());
@@ -25,13 +24,13 @@ app.get("/", async (req, res, next) => {
 app.use(errorJson);
 app.use(errorHandler);
 
-mongoose.connection.once("open", ()=>{
+mongoose.connection.once("open", () => {
   app.listen(process.env.PORT);
-  logger.info(`Server running on ${process.env.NODE_ENV}`); 
-  logger.info(`Mongo DB connection established successfully`);         
-})
+  logger.info(`Server running on ${process.env.NODE_ENV}`);
+  logger.info(`Mongoose Database connection established successfully`);
+});
 
-mongoose.connection.on("error", (err)=>{
+mongoose.connection.on("error", (err) => {
   logger.error(`Mongo DB connection failed ${err}`);
   process.exit(STATUSCODE.ONE);
-} );
+});
