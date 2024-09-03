@@ -1,5 +1,5 @@
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const { v4, as, uuidv4 } = require('uuid');   
+const { v4: uuidv4 } = require('uuid');   
 const multer = require("multer");  
 const cloudinary = require("../config/cloudinary");
 const { RESOURCE } = require("../constants/index");
