@@ -6,6 +6,7 @@ const upload = require("../utils/multer");
 const { uploadImage } = require("../utils/imageUpload");
 const { RESOURCE } = require("../constants/index.js");
 const cloudinary = require("../config/cloudinary.js");
+const setPassword = require("../utils/setPassword.js");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll();
@@ -25,10 +26,14 @@ exports.createUser = [
   upload.array(RESOURCE.IMAGE),
   asyncHandler(async (req, res, next) => {
     const image = await uploadImage(req.files, []);
+    console.log(req.password);
+    
+    const password = setPassword(req.password);
 
     const data = await service.create({
       ...req.body,
       image: image,
+      password: password,
     });
 
     return SuccessHandler(res, "User created successfully", data);
