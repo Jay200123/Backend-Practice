@@ -2,9 +2,9 @@ const service = require("../service/userService");
 const asyncHandler = require("express-async-handler");
 const SuccessHandler = require("../utils/successHandler");
 const ErrorHandler = require("../utils/errorHandler");
-const { default: mongoose } = require("mongoose");
-const { uploadImage } = require("../utils/imageUpload");
 const upload = require("../utils/multer");
+const { uploadImage } = require("../utils/imageUpload");
+const { RESOURCE } = require("../constants/index.js");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll();
@@ -14,10 +14,6 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 });
 
 exports.getOneUser = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new ErrorHandler(`Invalid user ID ${id}`);
-  }
   const data = await service.getById(req.params.id);
   return !data
     ? next(new ErrorHandler("No users found"))
@@ -25,25 +21,28 @@ exports.getOneUser = asyncHandler(async (req, res, next) => {
 });
 
 exports.createUser = [
-  upload.array("image"),
+  upload.array(RESOURCE.IMAGE),
   asyncHandler(async (req, res, next) => {
     const image = await uploadImage(req.files, []);
 
-    const data = service.create(
-      {
+    const data = await service.create({
       ...req.body,
       image: image,
-    }
-  );
+    });
+
     return SuccessHandler(res, "User created successfully", data);
   }),
 ];
 
 exports.updateUser = [
+  upload.array(RESOURCE.IMAGE),
   asyncHandler(async (req, res, next) => {
-    const data = await service.updateById(req.params.id, {
+    const data = await service.updateById(
+      req.params.id, 
+      {
       ...req.body,
-    });
+      }
+  );
 
     return SuccessHandler(res, "User update successfully", data);
   }),
