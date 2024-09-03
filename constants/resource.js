@@ -9,4 +9,5 @@ module.exports = {
   CLOUDINARY_FOLDER: "cloudinayImages", 
   OPEN: "open", 
   ERROR: "error",  
+  IMAGE: "image",
 };
