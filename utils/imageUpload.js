@@ -20,4 +20,4 @@ const uploadImage = async (files, oldImagePublicIds) => {
   return Promise.all(uploadPromises);
 };
 
-module.exports = uploadImage;   
+module.exports = { uploadImage };   
