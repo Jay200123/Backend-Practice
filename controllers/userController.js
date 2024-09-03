@@ -2,6 +2,9 @@ const service = require("../service/userService");
 const asyncHandler = require("express-async-handler");
 const SuccessHandler = require("../utils/successHandler");
 const ErrorHandler = require("../utils/errorHandler");
+const { default: mongoose } = require("mongoose");
+const { uploadImage } = require("../utils/imageUpload");
+const upload = require("../utils/multer");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll();
@@ -11,6 +14,10 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 });
 
 exports.getOneUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new ErrorHandler(`Invalid user ID ${id}`);
+  }
   const data = await service.getById(req.params.id);
   return !data
     ? next(new ErrorHandler("No users found"))
@@ -18,8 +25,16 @@ exports.getOneUser = asyncHandler(async (req, res, next) => {
 });
 
 exports.createUser = [
+  upload.array("image"),
   asyncHandler(async (req, res, next) => {
-    const data = service.create(req.body);
+    const image = await uploadImage(req.files, []);
+
+    const data = service.create(
+      {
+      ...req.body,
+      image: image,
+    }
+  );
     return SuccessHandler(res, "User created successfully", data);
   }),
 ];
