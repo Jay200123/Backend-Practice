@@ -26,16 +26,15 @@ exports.createUser = [
   upload.array(RESOURCE.IMAGE),
   asyncHandler(async (req, res, next) => {
     const image = await uploadImage(req.files, []);
-    console.log(req.password);
     
-    const password = setPassword(req.password);
+    const password = await setPassword(req.body.password);
 
     const data = await service.create({
       ...req.body,
       image: image,
       password: password,
     });
-
+    
     return SuccessHandler(res, "User created successfully", data);
   }),
 ];
