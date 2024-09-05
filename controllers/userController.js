@@ -4,9 +4,11 @@ const SuccessHandler = require("../utils/successHandler");
 const ErrorHandler = require("../utils/errorHandler");
 const upload = require("../utils/multer");
 const { uploadImage } = require("../utils/imageUpload");
-const { RESOURCE } = require("../constants/index.js");
+const { RESOURCE, STATUSCODE } = require("../constants/index.js");
 const cloudinary = require("../config/cloudinary.js");
 const setPassword = require("../utils/setPassword.js");
+const bcrypt = require("bcrypt");
+const generateAccessToken = require("../middleware/generateAccess.js");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll();
@@ -22,11 +24,11 @@ exports.getOneUser = asyncHandler(async (req, res, next) => {
     : SuccessHandler(res, "User Found", data);
 });
 
-exports.createUser = [
+exports.registerUser = [
   upload.array(RESOURCE.IMAGE),
   asyncHandler(async (req, res, next) => {
     const image = await uploadImage(req.files, []);
-    
+
     const password = await setPassword(req.body.password);
 
     const data = await service.create({
@@ -34,8 +36,32 @@ exports.createUser = [
       image: image,
       password: password,
     });
-    
+
     return SuccessHandler(res, "User created successfully", data);
+  }),
+];
+
+exports.loginUser = [
+  asyncHandler(async (req, res, next) => {
+    const { email, password } = req.body;
+    const data = await service.getByEmail(email);
+
+    if (!data) {
+      throw new ErrorHandler("User Data not found");
+    }
+
+    if (!(await bcrypt.compare(password, data?.password))) {
+      throw new ErrorHandler(
+        "Password does not match",
+        STATUSCODE.UNAUTHORIZED
+      );
+    }
+
+    const accessToken = generateAccessToken({
+      id: data?._id,
+    });
+
+    return SuccessHandler(res, "User Login Successfully", data, accessToken);
   }),
 ];
 
