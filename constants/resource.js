@@ -10,4 +10,5 @@ module.exports = {
   OPEN: "open", 
   ERROR: "error",  
   IMAGE: "image",
+  ONE_DAY: "1d",
 };
