@@ -16,7 +16,12 @@ const userRoutes = [
   {
     method: METHOD.POST,
     path: PATH.USERS,
-    handler: userController.createUser,
+    handler: userController.registerUser,
+  },
+  {
+    method: METHOD.POST,
+    path: PATH.LOGIN,
+    handler: userController.loginUser,
   },
   {
     method: METHOD.PATCH,
