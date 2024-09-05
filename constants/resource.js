@@ -11,4 +11,5 @@ module.exports = {
   ERROR: "error",  
   IMAGE: "image",
   ONE_DAY: "1d",
+  TOKEN: "token",
 };
