@@ -1,14 +1,16 @@
 const service = require("../service/userService");
 const asyncHandler = require("express-async-handler");
-const SuccessHandler = require("../utils/successHandler");
-const ErrorHandler = require("../utils/errorHandler");
-const upload = require("../utils/multer");
-const { uploadImage } = require("../utils/imageUpload");
 const { RESOURCE, STATUSCODE } = require("../constants/index.js");
+const {
+  ErrorHandler,
+  SuccessHandler,
+  upload,
+  uploadImage,
+  setPassword,
+} = require("../utils/index.js");
 const cloudinary = require("../config/cloudinary.js");
-const setPassword = require("../utils/setPassword.js");
 const bcrypt = require("bcrypt");
-const generateAccessToken = require("../middleware/generateAccess.js");
+const sendToken = require("../middleware/sendToken.js");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll();
@@ -43,25 +45,26 @@ exports.registerUser = [
 
 exports.loginUser = [
   asyncHandler(async (req, res, next) => {
-    const { email, password } = req.body;
-    const data = await service.getByEmail(email);
+    const data = await service.getByEmail(req.body.email);
 
     if (!data) {
       throw new ErrorHandler("User Data not found");
     }
 
-    if (!(await bcrypt.compare(password, data?.password))) {
+    if (!(await bcrypt.compare(req.body.password, data?.password))) {
       throw new ErrorHandler(
         "Password does not match",
         STATUSCODE.UNAUTHORIZED
       );
     }
 
-    const accessToken = generateAccessToken({
-      id: data?._id,
-    });
+    // const accessToken = generateAccessToken({
+    //   id: data?._id,
+    // });
 
-    return SuccessHandler(res, "User Login Successfully", data, accessToken);
+    // return SuccessHandler(res, "User Login Successfully", data, sendToken);
+
+    sendToken(res, data, "User Successfully Login", STATUSCODE.SUCCESS);
   }),
 ];
 
