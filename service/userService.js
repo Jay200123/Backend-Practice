@@ -22,3 +22,7 @@ exports.updateById = async (_id, body) => {
 exports.deleteById = async (_id) => {
   return await user.findByIdAndDelete(_id);
 };
+
+exports.getByEmail = async(email)=>{
+  return await user.findOne({ email }).select("+password");
+};
