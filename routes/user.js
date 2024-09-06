@@ -21,16 +21,19 @@ const userRoutes = [
   {
     method: METHOD.POST,
     path: PATH.USERS,
+    role:[],
     handler: userController.registerUser,
   },
   {
     method: METHOD.POST,
     path: PATH.LOGIN,
+    role:[],
     handler: userController.loginUser,
   },
   {
     method: METHOD.GET,
     path: PATH.LOGOUT,
+    role:[],
     handler: userController.logoutUser,
   },
   {
@@ -51,7 +54,7 @@ const userRoutes = [
 
 userRoutes.forEach((route) => {
   const { method, path, middleware = [], role = [], handler } = route;
-  router[method](path, middleware, userRole(...role), handler);
+  router[method](path, middleware.concat(userRole(...role)), handler);
 });
 
 module.exports = router;
