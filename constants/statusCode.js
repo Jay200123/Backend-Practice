@@ -5,4 +5,5 @@ module.exports = {
   NOT_FOUND: 404,
   ONE: 1,
   UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
 };
