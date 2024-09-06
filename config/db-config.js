@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { RESOURCE, STATUSCODE } = require("../constants/index");
-const logger = require("../utils/logger");
+const { logger } = require("../utils/index.js");
 
 const connectDB = async () => {
   try {
