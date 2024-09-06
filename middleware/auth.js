@@ -18,7 +18,7 @@ const isAuthenticated = async (req, res, next) => {
 
 const userRole = (...roles) => {
   return (req, res, next) => {
-    console.log(req.use.role)
+    console.log(req.user);
     // if (!roles.includes(req.user.role)) {
     //   return next(
     //     new ErrorHandler(
