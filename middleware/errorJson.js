@@ -1,6 +1,6 @@
 const ErrorHandler = require("../utils/errorHandler");
 const { STATUSCODE, ERROR } = require("../constants/index");
-const logger = require("../utils/logger");  
+const { logger } = require("../utils/index.js");  
 
 const errorJson = (err, req, res, next) => {
   if (!(err instanceof ErrorHandler)) {
