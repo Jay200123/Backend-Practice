@@ -4,4 +4,4 @@ const globalEnvironment = () => {
   });
 };
 
-module.exports = globalEnvironment ;
+module.exports = globalEnvironment;
