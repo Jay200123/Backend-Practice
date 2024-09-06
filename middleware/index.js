@@ -2,7 +2,7 @@ const { errorJson, errorHandler } = require("./errorJson");
 const generateJwtToken = require("./generateJwtToken");
 const sendToken = require("./sendToken");
 const removeToken = require("./removeToken");
-const isAuthenticated = require("./auth");
+const { isAuthenticated, userRole } = require("./auth");
 
 module.exports = {
   errorJson,
@@ -11,4 +11,5 @@ module.exports = {
   sendToken,
   removeToken,
   isAuthenticated,
+  userRole,
 };
