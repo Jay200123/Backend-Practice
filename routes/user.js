@@ -1,19 +1,21 @@
 const { router } = require("../config/express-config");
-const { METHOD, PATH } = require("../constants/index");
+const { METHOD, PATH, ROLE } = require("../constants/index");
 const userController = require("../controllers/userController");
-const { isAuthenticated } = require("../middleware/index.js");
+const { isAuthenticated, userRole } = require("../middleware/index.js");
 
 const userRoutes = [
   {
     method: METHOD.GET,
     path: PATH.USERS,
     middleware: [isAuthenticated],
+    role: [ROLE.ADMIN],
     handler: userController.getAllUsers,
   },
   {
     method: METHOD.GET,
     path: PATH.USER_ID,
     middleware: [isAuthenticated],
+    role: [ROLE.ADMIN],
     handler: userController.getOneUser,
   },
   {
@@ -35,19 +37,21 @@ const userRoutes = [
     method: METHOD.PATCH,
     path: PATH.EDIT_USER_ID,
     middleware: [isAuthenticated],
+    role: [ROLE.ADMIN],
     handler: userController.updateUser,
   },
   {
     method: METHOD.DELETE,
     path: PATH.USER_ID,
     middleware: [isAuthenticated],
+    role: [ROLE.ADMIN],
     handler: userController.deleteUser,
   },
 ];
 
 userRoutes.forEach((route) => {
-  const { method, path, middleware = [], handler } = route;
-  router[method](path,  middleware, handler);
+  const { method, path, middleware = [], role = [], handler } = route;
+  router[method](path, middleware, userRole(...role), handler);
 });
 
 module.exports = router;
