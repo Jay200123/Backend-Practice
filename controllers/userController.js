@@ -8,7 +8,7 @@ const {
   uploadImage,
   setPassword,
 } = require("../utils/index.js");
-const cloudinary = require("../config/cloudinary.js");
+const cloudinary = require("../config/index.js");
 const bcrypt = require("bcrypt");
 const { sendToken, removeToken } = require("../middleware/index.js");
 
