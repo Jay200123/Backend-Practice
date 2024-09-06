@@ -16,4 +16,18 @@ const isAuthenticated = async (req, res, next) => {
   next();
 };
 
-module.exports = isAuthenticated;
+const userRole = (...roles) => {
+  return (req, res, next) => {
+    console.log(req.use.role)
+    // if (!roles.includes(req.user.role)) {
+    //   return next(
+    //     new ErrorHandler(
+    //       `${req.user.role} is not authorized to access this resource`,
+    //       STATUSCODE.FORBIDDEN
+    //     )
+    //   );
+    // }
+  };
+};
+
+module.exports = { isAuthenticated, userRole };
