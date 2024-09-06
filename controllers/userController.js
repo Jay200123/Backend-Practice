@@ -10,7 +10,7 @@ const {
 } = require("../utils/index.js");
 const cloudinary = require("../config/cloudinary.js");
 const bcrypt = require("bcrypt");
-const sendToken = require("../middleware/sendToken.js");
+const { sendToken, removeToken } = require("../middleware/index.js");
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll();
@@ -96,4 +96,8 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   return !data
     ? next(new ErrorHandler("User Id not found"))
     : SuccessHandler(res, "User deleted successfully", data);
+});
+
+exports.logoutUser = asyncHandler(async (req, res, next) => {
+  return await removeToken(res, "User Successfully Logout", STATUSCODE.SUCCESS);
 });
