@@ -1,14 +1,11 @@
-const logger = require("./utils/logger.js");
-const mongoose = require("mongoose");
+const { globalEnvironment, connectDB } = require("./config/index.js");
 const { RESOURCE, STATUSCODE } = require("./constants/index.js");
+const { logger } = require("./utils/index.js");
+const mongoose = require("mongoose");
 
-const app = require("./app/index.js");
-
-const globalEnvironment = require("./config/env-config.js");
 globalEnvironment();
-
-const connectDB = require("./config/db-config.js");
 connectDB();
+const app = require("./app/index.js");
 
 mongoose.connection.once(RESOURCE.OPEN, () => {
   app.listen(process.env.PORT);
