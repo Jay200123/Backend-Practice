@@ -57,13 +57,7 @@ exports.loginUser = [
         STATUSCODE.UNAUTHORIZED
       );
     }
-
-    // const accessToken = generateAccessToken({
-    //   id: data?._id,
-    // });
-
-    // return SuccessHandler(res, "User Login Successfully", data, sendToken);
-
+    
     sendToken(res, data, "User Successfully Login", STATUSCODE.SUCCESS);
   }),
 ];
