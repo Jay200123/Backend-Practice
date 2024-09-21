@@ -11,7 +11,7 @@ const routes = require("../routes/index.js");
 
 app.get(PATH.INDEX, async (req, res, next) => {
   const data = { message: "Express Server Running Successfully..." };
-  res.status(200).json(data);
+  res.status(STATUSCODE.SUCCESS).json(data);
 });
 
 app.use(`${RESOURCE.API}${RESOURCE.V1}`, routes);
