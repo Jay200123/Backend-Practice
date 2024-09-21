@@ -1,0 +1,10 @@
+DATABASE_URI= "YOUR Mongo db DATABASE URI"
+PORT=4000
+NODE_ENV=DEVELOPMENT
+CLOUDINARY_NAME= "Your Cloudinary name"
+CLOUDINARY_API_KEY="Your Cloudinary api key"
+CLOUDINARY_API_SECRET="Your Cloudinary api secret"
+SALT_NUMBER=10
+COOKIE_EXPIRES_TIME="Your cookie expires time"
+ACCESS_TOKEN_SECRET="Your token secret"
+TOKEN_EXPIRES_TIME="Your token expires time"
