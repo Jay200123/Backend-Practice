@@ -12,4 +12,7 @@ module.exports = {
   IMAGE: "image",
   ONE_DAY: "1d",
   TOKEN: "token",
+  PASSWORD: "+password",
+  POSTS: "posts", 
+  ITEM: "item", 
 };
