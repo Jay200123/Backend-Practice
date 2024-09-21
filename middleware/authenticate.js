@@ -9,25 +9,21 @@ const isAuthenticated = async (req, res, next) => {
   }
 
   const decode = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET)
-  const data = await service.getById(decode?.id)
-  req.user = data
-  console.log(req.user);
+  req.user = await service.getById(decode?.id)
   next()
 }
 
 const userRole = (...roles) => {
   return (req, res, next) => {
-    // console.log(req.user);
-    next()
-    // if (!roles.includes(req.user.role)) {
-    //   return next(
-    //     new ErrorHandler(
-    //       `${req.user.role} is not authorized to access this resource`,
-    //       STATUSCODE.FORBIDDEN
-    //     )
-    //   );
-    // }
-    // next();
+    if (!roles?.includes(req?.user?.role)) {
+      return next(
+        new ErrorHandler(
+          `${req.user.role} is not authorized to access this resource`,
+          STATUSCODE.FORBIDDEN
+        )
+      );
+    }
+    next();
   }
 }
 
