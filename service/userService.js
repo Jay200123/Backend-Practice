@@ -1,4 +1,5 @@
 const user = require("../model/user");
+const { RESOURCE } = require("../constants/index"); 
 
 exports.getAll = async () => {
   return await user.find();
@@ -24,5 +25,5 @@ exports.deleteById = async (_id) => {
 };
 
 exports.getByEmail = async(email)=>{
-  return await user.findOne({ email }).select("+password");
+  return await user.findOne({ email }).select(RESOURCE.PASSWORD);
 };
