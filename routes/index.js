@@ -1,17 +1,21 @@
-const { router } = require("../config/express-config");
-const { PATH } = require("../constants/index");
-const userRoutes = require("../routes/user");
-
+const { router } = require('../config/express-config')
+const { PATH } = require('../constants/index')
+const authRoutes = require('../routes/auth')
+const userRoutes = require('../routes/user')
 const routers = [
   {
-    path: PATH.USERS,
-    route: userRoutes,
+    path: [],
+    route: authRoutes
   },
-];
+  {
+    path: PATH.USERS,
+    route: userRoutes
+  }
+]
 
-routers.map((routes) => {
-  const { path, route } = routes;
-  router.use(path, route);
-});
+routers.map(routes => {
+  const { path, route } = routes
+  router.use(path, route)
+})
 
-module.exports = router;
+module.exports = router
