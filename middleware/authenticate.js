@@ -1,4 +1,4 @@
-const service = require('../service/userService.js')
+const service = require('../routes/users/service.js') 
 const jwt = require('jsonwebtoken')
 const { ErrorHandler } = require('../utils/index.js')
 const { STATUSCODE } = require('../constants/index')
