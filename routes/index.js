@@ -1,7 +1,7 @@
 const { router } = require('../config/express-config')
 const { PATH } = require('../constants/index')
-const authRoutes = require('../routes/auth')
-const userRoutes = require('../routes/user')
+const authRoutes = require('../routes/authenticate/route')
+const userRoutes = require('../routes/users/route')
 const routers = [
   {
     path: [],
