@@ -22,8 +22,6 @@ app.all("*", (req, res, next) => {
   next(error);
 });
 
-
-
 app.use(errorJson);
 app.use(errorHandler);
 
