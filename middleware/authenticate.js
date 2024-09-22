@@ -5,7 +5,7 @@ const { STATUSCODE } = require('../constants/index')
 
 const isAuthenticated = async (req, res, next) => {
   if (!req.cookies.token) {
-    return next(new ErrorHandler('Login First', STATUSCODE.UNAUTHORIZED))
+    return next(new ErrorHandler('User must Login First', STATUSCODE.UNAUTHORIZED))
   }
 
   const decode = jwt.verify(req.cookies.token, process.env.ACCESS_TOKEN_SECRET)
@@ -18,7 +18,7 @@ const userRole = (...roles) => {
     if (!roles?.includes(req?.user?.role)) {
       return next(
         new ErrorHandler(
-          `${req.user.role} is not authorized to access this resource`,
+          `You are not authorized to access this resource`,
           STATUSCODE.FORBIDDEN
         )
       );
