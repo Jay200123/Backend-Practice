@@ -1,5 +1,3 @@
-const { NOT_FOUND } = require("./statusCode");
-
 module.exports = {
   INDEX: "/",
   NOT_FOUND: "*",
@@ -8,4 +6,7 @@ module.exports = {
   EDIT_USER_ID: "/user/edit/:id",
   LOGIN: "/login",
   LOGOUT: "/logout",
+  ITEMS: "/items",
+  ITEM_ID: "/item/:id", 
+  EDIT_ITEM_ID: "/item/edit/:id", 
 };
