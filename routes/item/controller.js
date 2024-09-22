@@ -41,7 +41,6 @@ exports.createItem = [
 exports.updateItem = [
   upload.array(RESOURCE.IMAGE),
   asyncHandler(async (req, res, next) => {
-    
     const item = await service.getById(req.params.id)
     const oldImage = item?.image?.map(i => i?.public_id)
     const image = await imageUpload(req.files, oldImage)
