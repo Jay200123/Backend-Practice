@@ -2,7 +2,6 @@ const { router } = require("../../config/index.js");
 const { METHOD, PATH, ROLE } = require("../../constants/index.js");
 const userController = require("./controller.js");
 const { isAuthenticated, userRole } = require("../../middleware/index.js");
-const method = require("../../constants/method.js");
 
 const userRoutes = [
   {
