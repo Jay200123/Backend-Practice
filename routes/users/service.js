@@ -27,3 +27,7 @@ exports.deleteById = async (_id) => {
 exports.getByEmail = async(email)=>{
   return await user.findOne({ email }).select(RESOURCE.PASSWORD);
 };
+
+exports.createVerificationCode = async(_id, code)=>{
+  return await user.findOneAndUpdate(_id, { verificationCode: { code: code, createdAt: new Date() } }, { new: true });  
+ }
