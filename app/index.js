@@ -2,10 +2,12 @@ const { app, express } = require("../config/index.js");
 const { errorJson, errorHandler } = require("../middleware/index.js");
 const { RESOURCE, STATUSCODE, PATH } = require("../constants/index.js");
 const cookieParser = require("cookie-parser");
+const compression = require("compression"); 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(compression()); 
 
 const routes = require("../routes/index.js");
 
