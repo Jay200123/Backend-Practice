@@ -9,4 +9,8 @@ module.exports = {
   ITEMS: "/items",
   ITEM_ID: "/item/:id", 
   EDIT_ITEM_ID: "/item/edit/:id", 
+  ACCESSORIES: "/accessories",  
+  ACCESSORY_ID: "/accessory/:id", 
+  EDIT_ACCESSORY_ID: "/accessory/edit/:id",
+  USER_OTP: "/user/otp",  
 };
