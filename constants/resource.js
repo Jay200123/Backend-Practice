@@ -15,4 +15,6 @@ module.exports = {
   PASSWORD: "+password",
   POSTS: "posts", 
   ITEM: "item", 
+  ACCESSORIES: "accessories", 
+  GMAIL: "Gmail", 
 };
