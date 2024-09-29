@@ -35,7 +35,17 @@ const userSchema = new mongoose.Schema({
     required: true,
     enum: ['Admin', 'Customer'],
     default: 'Customer'
-  }
+  },
+  verificationCode: {
+    code: {
+      type: Number,
+      default: null,
+    },
+    createdAt:{
+      type: Date,
+      default: null,
+    }
+  },  
 })
 
 module.exports = mongoose.model(RESOURCE.USERS, userSchema)
