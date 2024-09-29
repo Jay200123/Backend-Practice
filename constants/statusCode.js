@@ -6,5 +6,7 @@ module.exports = {
   ONE: 1,
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
-  ZERO: 0,  
+  ZERO: 0,
+  SIX: 6,
+  TEN: 10,  
 };
