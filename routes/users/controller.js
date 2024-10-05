@@ -80,10 +80,10 @@ exports.sendEmailOTP = asyncHandler(async (req, res, next) => {
 
 exports.resetPassword = asyncHandler(async (req, res, next) => {
   if (req.body.newPassword !== req.body.confirmPassword) {
-    throw new ErrorHandler('Password and Confirm Password does not match')
+    throw new ErrorHandler('Password does not match')
   }
 
-  const code = await user.getbyOTPCode(req.body.otp)
+  const code = await service.getbyOTPCode(req.body.otp)
   if (
     Date.now() - new Date(code.verificationCode.createdAt).getTime() >
     5 * 60 * 1000
@@ -94,7 +94,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   }
 
   const password = await setPassword(req.body.newPassword)
-  const data = service.resetPassword(req.body.otp, password)
+  const data = await service.resetPassword(req.body.otp, password);
 
   return SuccessHandler(res, 'Password reset successfully', data)
 })
