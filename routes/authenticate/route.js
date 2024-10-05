@@ -1,6 +1,7 @@
 const { router } = require('../../config/index')
 const { METHOD, PATH } = require('../../constants/index') 
 const authController = require('./controller');
+const userController = require('../users/controller'); 
 
 const authRoutes = [
   {
@@ -18,6 +19,20 @@ const authRoutes = [
     method: METHOD.GET,
     path: PATH.LOGOUT,
     handler: authController.logoutUser
+  },
+  {
+    method: METHOD.POST,
+    path: PATH.USER_OTP,
+    middleware: [],
+    role: [],
+    handler: userController.sendEmailOTP,
+  },
+  {
+    method: METHOD.PATCH,
+    path: PATH.USER_RESET_PASSWORD, 
+    middleware: [],  
+    role: [],  
+    handler: userController.resetPassword,    
   }
 ]
 
