@@ -1,8 +1,9 @@
-const { router } = require('../config/express-config')
-const { PATH } = require('../constants/index')
-const authRoutes = require('../routes/authenticate/route')
-const userRoutes = require('../routes/users/route')
+const { router } = require('../config/express-config');
+const { PATH } = require('../constants/index');
+const authRoutes = require('../routes/authenticate/route');
+const userRoutes = require('../routes/users/route');
 const itemRoutes = require("../routes/item/route");
+const accessoriesRoutes = require("../routes/accessories/route"); 
 
 const routers = [
   {
@@ -16,6 +17,10 @@ const routers = [
   {
     path: PATH.ITEMS,
     route: itemRoutes
+  },
+  {
+    path: PATH.ACCESSORIES,
+    route: accessoriesRoutes  
   }
 ]
 
