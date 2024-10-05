@@ -31,3 +31,11 @@ exports.getByEmail = async(email)=>{
 exports.createVerificationCode = async(_id, code)=>{
   return await user.findOneAndUpdate(_id, { verificationCode: { code: code, createdAt: new Date() } }, { new: true });  
  }
+
+ exports.getbyOTPCode = async(otp)=>{ 
+  return await user.findOne({ 'verificationCode.code': otp });    
+ }
+
+ exports.resetPassword = async(otp, newPassword)=>{
+  return await user.findOneAndUpdate((await user.findOne({ 'verificationCode.code': otp }))?._id, { password: newPassword, verificationCode: null }, { new: true, runValidators: true }).select(RESOURCE.PASSWORD);  
+ }
