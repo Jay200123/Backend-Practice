@@ -32,13 +32,6 @@ const userRoutes = [
     role: [ROLE.ADMIN],
     handler: userController.deleteUser,
   },
-  {
-    method: METHOD.POST,
-    path: PATH.USER_OTP,
-    middleware: [isAuthenticated],
-    role: [ROLE.ADMIN, ROLE.CUSTOMER],
-    handler: userController.sendEmailOTP,
-  },
 ];
 
 userRoutes.forEach((route) => {
