@@ -11,7 +11,7 @@ const transactionSchema = new mongoose.Schema({
     ref: RESOURCE.USER,
     required: true
   },
-  item: [
+  items: [
     {
       item: {
         type: mongoose.Schema.Types.ObjectId,
@@ -25,7 +25,7 @@ const transactionSchema = new mongoose.Schema({
     }
   ],
 
-  accessory: [
+  accessories: [
     {
       accessory: {
         type: mongoose.Schema.Types.ObjectId,
