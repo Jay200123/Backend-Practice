@@ -12,5 +12,6 @@ module.exports = {
   ACCESSORIES: "/accessories",  
   ACCESSORY_ID: "/accessory/:id", 
   EDIT_ACCESSORY_ID: "/accessory/edit/:id",
-  USER_OTP: "/user/otp",  
+  USER_OTP: "/otp",
+  USER_RESET_PASSWORD: "/reset-password",   
 };
