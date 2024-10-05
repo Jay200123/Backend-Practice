@@ -29,6 +29,10 @@ const itemSchema = new mongoose.Schema({
       originalname: String
     }
   ],
-});
+  quantity: {
+    type: Number,
+    required: true
+  }
+})
 
-module.exports = mongoose.model(RESOURCE.ITEM, itemSchema); 
+module.exports = mongoose.model(RESOURCE.ITEM, itemSchema)
