@@ -7,8 +7,12 @@ const {
   upload,
   imageUpload
 } = require('../../utils/index')
-const cloudinary = require('../../config/cloudinary');
-const { sendEmail, generateRandomCode } = require('../../utils/index'); 
+const cloudinary = require('../../config/cloudinary')
+const {
+  sendEmail,
+  generateRandomCode,
+  setPassword
+} = require('../../utils/index')
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll()
@@ -52,19 +56,45 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   return !data
     ? next(new ErrorHandler('User Id not found'))
     : SuccessHandler(res, 'User deleted successfully', data)
-});
+})
 
 exports.sendEmailOTP = asyncHandler(async (req, res, next) => {
-  const user =  await service.getByEmail(req.body.email);
+  const user = await service.getByEmail(req.body.email)
 
-  if(new Date() - new Date(user?.verificationCode?.createdAt) < 5 * 60 * 1000){  
-   throw new ErrorHandler('Please wait for 5 minutes before requesting another OTP');
-  } 
+  if (
+    new Date() - new Date(user?.verificationCode?.createdAt) <
+    5 * 60 * 1000
+  ) {
+    throw new ErrorHandler(
+      'Please wait for 5 minutes before requesting another OTP'
+    )
+  }
 
-  const otp = generateRandomCode();  
-  await sendEmail(user?.email, otp);
+  const otp = generateRandomCode()
+  await sendEmail(user?.email, otp)
 
-  const data = await service.createVerificationCode(user?._id, otp);
+  const data = await service.createVerificationCode(user?._id, otp)
 
-  return SuccessHandler(res, 'OTP sent successfully', data);  
-}) 
+  return SuccessHandler(res, 'OTP sent successfully', data)
+})
+
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  if (req.body.newPassword !== req.body.confirmPassword) {
+    throw new ErrorHandler('Password and Confirm Password does not match')
+  }
+
+  const code = await user.getbyOTPCode(req.body.otp)
+  if (
+    Date.now() - new Date(code.verificationCode.createdAt).getTime() >
+    5 * 60 * 1000
+  ) {
+    code.verificationCode = null
+    await code.save()
+    throw new ErrorHandler('Verification code has expired')
+  }
+
+  const password = await setPassword(req.body.newPassword)
+  const data = service.resetPassword(req.body.otp, password)
+
+  return SuccessHandler(res, 'Password reset successfully', data)
+})
