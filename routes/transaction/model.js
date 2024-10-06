@@ -3,12 +3,13 @@ const { RESOURCE } = require('../../constants/index')
 
 const transactionSchema = new mongoose.Schema({
   date: {
+    type: Date,
     required: true,
     default: Date.now
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: RESOURCE.USER,
+    ref: RESOURCE.USERS,
     required: true
   },
   items: [
@@ -30,17 +31,28 @@ const transactionSchema = new mongoose.Schema({
       accessory: {
         type: mongoose.Schema.Types.ObjectId,
         ref: RESOURCE.ACCESSORIES,
-        required: true
+        required: false
       },
       quantity: {
         type: Number,
-        required: true
+        required: false
       }
     }
   ],
   amount: {
     type: Number,
-    required: true
+    required: false,
+  },
+  payment: {
+    type: String,
+    required: true,
+    enum: ['CASH', 'CARD', 'UPI']
+  },
+  status: {
+    type: String,
+    required: true,
+    enum: ['PENDING', 'COMPLETED', 'CANCELLED'],
+    default: 'PENDING'
   }
 })
 
