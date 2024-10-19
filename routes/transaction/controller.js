@@ -27,9 +27,14 @@ exports.createTransaction = [
 
     let itemAmount = 0
     for (const items of newItems) {
-      const itemData = await item.getById(items.item)
+      const itemData = await item.getById(items?.item_id)
+
+      if (itemData?.quantity < items?.quantity || itemData?.quantity == STATUSCODE.ZERO) {
+        throw new ErrorHandler('Item out of stock', STATUSCODE.BAD_REQUEST)
+      }
+
       itemAmount += itemData?.price * items?.quantity
-      await item.updateById(items?.item, {
+      await item.updateById(itemData?._id, {
         quantity: itemData?.quantity - items?.quantity
       })
     }
@@ -40,14 +45,22 @@ exports.createTransaction = [
 
     let accessoryAmount = 0
     for (const accessories of newAccessories) {
-      const accessoryData = await accessory.getById(accessories.accessory)
+      const accessoryData = await accessory.getById(accessories?.accessory_id)
+
+      if (accessoryData?.quantity < accessories?.quantity || accessoryData?.quantity == STATUSCODE.ZERO) {
+        throw new ErrorHandler(
+          'Accessories out of stock',
+          STATUSCODE.BAD_REQUEST
+        )
+      }
+
       accessoryAmount += accessoryData?.price * accessories?.quantity
       await accessory.updateById(accessoryData?._id, {
         quantity: accessoryData?.quantity - accessories?.quantity
       })
     }
 
-    const totalAmount = itemAmount + accessoryAmount;
+    const totalAmount = itemAmount + accessoryAmount
 
     const data = await service.create({
       ...req.body,
@@ -59,3 +72,10 @@ exports.createTransaction = [
     return SuccessHandler(res, 'Transaction created successfully', data)
   })
 ]
+
+exports.deleteTransaction = asyncHandler(async (req, res, next) => { 
+  const data = await service.deleteById(req.params.id)
+  return !data || data.length === STATUSCODE.ZERO
+    ? next(new ErrorHandler('No transaction found'))
+    : SuccessHandler(res, 'Transaction deleted successfully', data);   
+}) 
