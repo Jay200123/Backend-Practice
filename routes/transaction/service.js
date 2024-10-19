@@ -4,16 +4,16 @@ exports.getAll = async () => {
   return await transaction
     .find()
     .populate('user')
-    .populate('items.item')
-    .populate('accessories.accessory')
+    .populate('items.item_id')
+    .populate('accessories.accessory_id')
 }
 
-exports.getById = async id => {
+exports.getById = async _id => {
   return await transaction
-    .findById(id)
+    .findById(_id)
     .populate('user')
-    .populate('items.item')
-    .populate('accessories.accessory')
+    .populate('items.item_id')
+    .populate('accessories.accessory_id')
 }
 
 exports.create = async data => {
