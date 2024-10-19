@@ -14,7 +14,7 @@ const transactionSchema = new mongoose.Schema({
   },
   items: [
     {
-      item: {
+      item_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: RESOURCE.ITEM,
         required: true
@@ -28,7 +28,7 @@ const transactionSchema = new mongoose.Schema({
 
   accessories: [
     {
-      accessory: {
+      accessory_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: RESOURCE.ACCESSORIES,
         required: false
