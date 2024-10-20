@@ -32,6 +32,13 @@ const userRoutes = [
     role: [ROLE.ADMIN],
     handler: userController.deleteUser,
   },
+  {
+    method: METHOD.GET,
+    path: PATH.USER_ORDERS,
+    middleware: [isAuthenticated],
+    role: [ROLE.ADMIN, ROLE.CUSTOMER],
+    handler: userController.getUserOrders,
+  }
 ];
 
 userRoutes.forEach((route) => {
