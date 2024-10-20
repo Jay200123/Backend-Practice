@@ -26,6 +26,13 @@ const transactionRoutes = [
     handler: transactionController.createTransaction
   },
   {
+    method: METHOD.PATCH,
+    path: PATH.EDIT_TRANSACTION_ID,
+    middleware: [isAuthenticated],
+    role: [ROLE.ADMIN],
+    handler: transactionController.updateTransaction
+  },
+  {
     method: METHOD.DELETE,
     path: PATH.TRANSACTION_ID,
     middleware: [isAuthenticated],
