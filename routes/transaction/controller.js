@@ -21,43 +21,28 @@ exports.getOneTransaction = asyncHandler(async (req, res, next) => {
 
 exports.createTransaction = [
   asyncHandler(async (req, res, next) => {
-    const newItems = req.body.items?.map(items => {
-      return items
-    })
-
     let itemAmount = 0
-    for (const items of newItems) {
-      const itemData = await item.getById(items?.item_id)
+    if (req.body.items && Array.isArray(req.body.items)) {
+      for (const items of req.body.items) {
+        const itemData = await item.getById(items?.item_id)
 
-      if (itemData?.quantity < items?.quantity || itemData?.quantity == STATUSCODE.ZERO) {
-        throw new ErrorHandler('Item out of stock', STATUSCODE.BAD_REQUEST)
+        itemAmount = itemData?.price * items?.quantity
+        await item.updateById(itemData?._id, {
+          quantity: itemData?.quantity - items?.quantity
+        })
       }
-
-      itemAmount += itemData?.price * items?.quantity
-      await item.updateById(itemData?._id, {
-        quantity: itemData?.quantity - items?.quantity
-      })
     }
 
-    const newAccessories = req.body.accessories?.map(accessories => {
-      return accessories
-    })
-
     let accessoryAmount = 0
-    for (const accessories of newAccessories) {
-      const accessoryData = await accessory.getById(accessories?.accessory_id)
+    if (req.body.accessories && Array.isArray(req.body.accessories)) {
+      for (const accessories of req.body.accessories) {
+        const accessoryData = await accessory.getById(accessories?.accessory_id)
 
-      if (accessoryData?.quantity < accessories?.quantity || accessoryData?.quantity == STATUSCODE.ZERO) {
-        throw new ErrorHandler(
-          'Accessories out of stock',
-          STATUSCODE.BAD_REQUEST
-        )
+        accessoryAmount += accessoryData?.price * accessories?.quantity
+        await accessory.updateById(accessoryData?._id, {
+          quantity: accessoryData?.quantity - accessories?.quantity
+        })
       }
-
-      accessoryAmount += accessoryData?.price * accessories?.quantity
-      await accessory.updateById(accessoryData?._id, {
-        quantity: accessoryData?.quantity - accessories?.quantity
-      })
     }
 
     const totalAmount = itemAmount + accessoryAmount
@@ -73,9 +58,48 @@ exports.createTransaction = [
   })
 ]
 
-exports.deleteTransaction = asyncHandler(async (req, res, next) => { 
+exports.updateTransaction = [
+  asyncHandler(async (req, res, next) => {
+    if (req.body.status == 'cancelled') {
+      const transactionData = await service.getById(req.params.id)
+
+      if (transactionData.items && Array.isArray(transactionData.items)) {
+        for (const items of transactionData.items) {
+          const itemData = await item.getById(items?.item_id)
+
+          await item.updateById(itemData?._id, {
+            quantity: itemData?.quantity + items?.quantity
+          })
+        }
+      }
+
+      if (
+        transactionData.accessories &&
+        Array.isArray(transactionData.accessories)
+      ) {
+        for (const accessories of transactionData.accessories) {
+          const accessoryData = await accessory.getById(
+            accessories?.accessory_id
+          )
+
+          await accessory.updateById(accessoryData?._id, {
+            quantity: accessoryData?.quantity + accessories?.quantity
+          })
+        }
+      }
+
+      const cancel = await service.updateById(req.params.id, req.body)
+      return SuccessHandler(res, 'Transaction cancelled successfully', cancel)
+    }
+
+    const data = await service.updateById(req.params.id, req.body)
+    return SuccessHandler(res, 'Transaction updated successfully', data)
+  })
+]
+
+exports.deleteTransaction = asyncHandler(async (req, res, next) => {
   const data = await service.deleteById(req.params.id)
   return !data || data.length === STATUSCODE.ZERO
     ? next(new ErrorHandler('No transaction found'))
-    : SuccessHandler(res, 'Transaction deleted successfully', data);   
-}) 
+    : SuccessHandler(res, 'Transaction deleted successfully')
+})
