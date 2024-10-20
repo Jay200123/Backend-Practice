@@ -14,14 +14,7 @@ const itemSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  date_purchased: {
-    type: Date,
-    required: true
-  },
-  brand_name: {
-    type: String,
-    required: true
-  },
+
   image: [
     {
       public_id: String,
@@ -31,6 +24,16 @@ const itemSchema = new mongoose.Schema({
   ],
   quantity: {
     type: Number,
+    required: true
+  },
+  category: {
+    type: String,
+    required: true,
+    enum: ['Clothing', 'Electronics', 'Books', 'Furniture', 'Others']
+  },
+
+  information: {
+    type: mongoose.Schema.Types.Mixed,
     required: true
   }
 })
