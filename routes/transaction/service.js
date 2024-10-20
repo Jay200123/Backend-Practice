@@ -6,6 +6,9 @@ exports.getAll = async () => {
     .populate('user')
     .populate('items.item_id')
     .populate('accessories.accessory_id')
+    .sort({ date: -1 })
+    .lean()
+    .exec()
 }
 
 exports.getById = async _id => {
@@ -29,4 +32,19 @@ exports.updateById = async (id, data) => {
 
 exports.deleteById = async id => {
   return await transaction.findByIdAndDelete(id)
+}
+
+exports.findByUserId = async id => {
+  return await transaction
+    .find({ user: id })
+    .populate({
+      path: 'items.item_id',
+      select: 'item_name description price'
+    })
+    .populate({
+      path: 'accessories.accessory_id',
+      select: 'accessory_name description price'
+    })
+    .lean()
+    .exec()
 }
