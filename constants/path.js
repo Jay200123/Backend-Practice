@@ -16,5 +16,6 @@ module.exports = {
   USER_RESET_PASSWORD: '/reset-password',
   TRANSACTIONS: '/transactions',
   TRANSACTION_ID: '/transaction/:id',
-  EDIT_TRANSACTION_ID: '/transaction/edit/:id'
+  EDIT_TRANSACTION_ID: '/transaction/edit/:id',
+  USER_ORDERS: '/user/orders/:id',    
 }
