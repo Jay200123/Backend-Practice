@@ -6,6 +6,7 @@ const errorJson = (err, req, res, next) => {
   if (!(err instanceof ErrorHandler)) {
     err = new ErrorHandler(err.message || ERROR.INTERNAL_SERVER_ERROR);
   }
+
   next(err);
 };
 
