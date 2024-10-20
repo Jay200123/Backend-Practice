@@ -13,6 +13,7 @@ const {
   generateRandomCode,
   setPassword
 } = require('../../utils/index')
+const transaction = require('../transaction/service')
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const data = await service.getAll()
@@ -94,7 +95,14 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   }
 
   const password = await setPassword(req.body.newPassword)
-  const data = await service.resetPassword(req.body.otp, password);
+  const data = await service.resetPassword(req.body.otp, password)
 
   return SuccessHandler(res, 'Password reset successfully', data)
+})
+
+exports.getUserOrders = asyncHandler(async (req, res, next) => {
+  const data = await transaction.findByUserId(req.params.id)
+  return !data
+    ? next(new ErrorHandler('No orders found'))
+    : SuccessHandler(res, 'Orders found', data)
 })
